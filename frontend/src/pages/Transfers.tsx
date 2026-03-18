@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { api } from '@/lib/api';
 import { formatCurrency, generateIdempotencyKey } from '@/lib/utils';
@@ -35,6 +35,13 @@ export default function Transfers() {
   const [reqAmount, setReqAmount] = useState('');
   const [reqDesc, setReqDesc] = useState('');
 
+  const refreshAccounts = useCallback(async () => {
+    try {
+      const data = await api.accounts.list();
+      setAccounts(data.accounts);
+    } catch {}
+  }, []);
+
   useEffect(() => {
     Promise.all([api.accounts.list(), api.payees.list()]).then(([a, p]) => {
       setAccounts(a.accounts);
@@ -62,6 +69,7 @@ export default function Transfers() {
       });
       setSuccess('Transfer sent successfully!');
       setExtAmount(''); setExtDesc('');
+      await refreshAccounts();
     } catch (err: any) { setError(err.message); }
     finally { setLoading(false); }
   };
@@ -79,6 +87,7 @@ export default function Transfers() {
       });
       setSuccess('Transfer completed!');
       setIntAmount(''); setIntDesc('');
+      await refreshAccounts();
     } catch (err: any) { setError(err.message); }
     finally { setLoading(false); }
   };
@@ -96,6 +105,7 @@ export default function Transfers() {
       });
       setSuccess('Money request sent!');
       setReqAmount(''); setReqDesc(''); setReqFromUser('');
+      await refreshAccounts();
     } catch (err: any) { setError(err.message); }
     finally { setLoading(false); }
   };
@@ -113,17 +123,17 @@ export default function Transfers() {
         <p className="text-muted-foreground">Send, transfer, or request funds</p>
       </div>
 
-      <div className="flex gap-2 border-b pb-2">
+      <div className="flex gap-2 border-b pb-2 overflow-x-auto">
         {tabs.map(t => (
           <button
             key={t.id}
             onClick={() => { setTab(t.id); setError(''); setSuccess(''); }}
-            className={`flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium transition-colors ${
+            className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium whitespace-nowrap transition-colors ${
               tab === t.id ? 'bg-primary text-white' : 'text-gray-600 hover:bg-gray-100'
             }`}
           >
             <t.icon className="h-4 w-4" />
-            {t.label}
+            <span className="hidden sm:inline">{t.label}</span>
           </button>
         ))}
       </div>

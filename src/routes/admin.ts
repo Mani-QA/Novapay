@@ -145,6 +145,15 @@ admin.post('/transactions/:id/reverse', async (c) => {
   return c.json({ message: 'Transaction reversed', reversal_id: reversalId });
 });
 
+admin.get('/users/:id/accounts', async (c) => {
+  const userId = c.req.param('id');
+  const accounts = await c.env.DB.prepare(
+    'SELECT id, account_name, account_type, balance, created_at FROM accounts WHERE user_id = ? ORDER BY account_type, created_at'
+  ).bind(userId).all();
+
+  return c.json({ accounts: accounts.results });
+});
+
 admin.get('/audit-log', async (c) => {
   const page = parseInt(c.req.query('page') || '1');
   const limit = parseInt(c.req.query('limit') || '50');

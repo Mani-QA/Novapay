@@ -60,16 +60,16 @@ export default function Activity() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="space-y-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Account Activity</h1>
           <p className="text-muted-foreground">View transaction history and download statements</p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
           <Select
             value={selectedAccount}
             onChange={e => { setSelectedAccount(e.target.value); setPage(1); }}
-            className="w-64"
+            className="sm:w-64"
           >
             {accounts.map(a => (
               <option key={a.id} value={a.id}>
@@ -117,7 +117,8 @@ export default function Activity() {
             </div>
           ) : (
             <>
-              <div className="overflow-x-auto">
+              {/* Desktop table */}
+              <div className="hidden sm:block overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b text-left text-muted-foreground">
@@ -155,6 +156,28 @@ export default function Activity() {
                     })}
                   </tbody>
                 </table>
+              </div>
+
+              {/* Mobile card layout */}
+              <div className="sm:hidden divide-y -mx-6">
+                {transactions.map(tx => {
+                  const isDebit = tx.from_account_id === selectedAccount;
+                  return (
+                    <div key={tx.id} className="px-6 py-3 flex items-center justify-between gap-3">
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <Badge variant="outline" className="text-xs">{tx.type.replace(/_/g, ' ')}</Badge>
+                          <Badge variant={statusVariant(tx.status)} className="text-xs">{tx.status}</Badge>
+                        </div>
+                        <p className="text-sm text-muted-foreground truncate mt-1">{tx.description || '-'}</p>
+                        <p className="text-xs text-muted-foreground">{formatDate(tx.created_at)}</p>
+                      </div>
+                      <p className={`text-sm font-semibold whitespace-nowrap ${isDebit ? 'text-red-600' : 'text-green-600'}`}>
+                        {isDebit ? '-' : '+'}{formatCurrency(tx.amount)}
+                      </p>
+                    </div>
+                  );
+                })}
               </div>
 
               {pagination && pagination.totalPages > 1 && (

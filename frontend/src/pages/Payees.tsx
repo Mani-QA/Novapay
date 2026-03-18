@@ -192,12 +192,12 @@ export default function Payees() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Payees</h1>
           <p className="text-muted-foreground">Manage your saved payees for quick transfers</p>
         </div>
-        <Button onClick={() => { setShowAdd(true); resetForm(); }}>
+        <Button className="w-full sm:w-auto" onClick={() => { setShowAdd(true); resetForm(); }}>
           <Plus className="h-4 w-4 mr-2" /> Add Payee
         </Button>
       </div>

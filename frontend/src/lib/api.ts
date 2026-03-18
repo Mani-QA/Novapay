@@ -72,6 +72,7 @@ export const api = {
   admin: {
     liquidity: () => request<any>('/admin/liquidity'),
     users: (page = 1) => request<{ users: any[]; pagination: any }>(`/admin/users?page=${page}`),
+    userAccounts: (id: string) => request<{ accounts: any[] }>(`/admin/users/${id}/accounts`),
     freezeUser: (id: string, frozen: boolean) =>
       request(`/admin/users/${id}/freeze`, { method: 'POST', body: JSON.stringify({ frozen }) }),
     transactions: (page = 1) =>

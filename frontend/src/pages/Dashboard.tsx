@@ -72,8 +72,8 @@ export default function Dashboard() {
         <p className="text-muted-foreground">Here's an overview of your accounts</p>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-3">
-        <Card className="md:col-span-1 bg-gradient-to-br from-primary to-blue-700 text-white">
+      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+        <Card className="sm:col-span-2 md:col-span-1 bg-gradient-to-br from-primary to-blue-700 text-white">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-blue-100">Total Balance</CardTitle>
           </CardHeader>
@@ -162,12 +162,12 @@ export default function Dashboard() {
           <CardContent>
             <div className="space-y-3">
               {recentTxns.map(tx => (
-                <div key={tx.id} className="flex items-center justify-between py-2 border-b last:border-0">
-                  <div>
-                    <p className="text-sm font-medium">{tx.description || tx.type}</p>
+                <div key={tx.id} className="flex items-center justify-between gap-3 py-2 border-b last:border-0">
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-medium truncate">{tx.description || tx.type.replace(/_/g, ' ')}</p>
                     <p className="text-xs text-muted-foreground">{new Date(tx.created_at).toLocaleDateString()}</p>
                   </div>
-                  <div className="text-right">
+                  <div className="text-right shrink-0">
                     <p className="text-sm font-semibold">{formatCurrency(tx.amount)}</p>
                     <Badge variant={tx.status === 'completed' ? 'success' : tx.status === 'failed' ? 'destructive' : 'warning'} className="text-xs">
                       {tx.status}

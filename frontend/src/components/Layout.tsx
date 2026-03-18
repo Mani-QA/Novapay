@@ -70,7 +70,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               </Link>
             ))}
           </nav>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1 sm:gap-3">
             <Link to="/notifications" className="relative p-2 text-gray-500 hover:text-gray-900">
               <Bell className="h-5 w-5" />
               {unreadCount > 0 && (
@@ -84,7 +84,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               <span className="text-xs text-muted-foreground">({user?.id})</span>
             </div>
             <Button variant="ghost" size="sm" onClick={handleLogout}>
-              <LogOut className="h-4 w-4 mr-1" /> Logout
+              <LogOut className="h-4 w-4 sm:mr-1" /> <span className="hidden sm:inline">Logout</span>
             </Button>
           </div>
         </div>
