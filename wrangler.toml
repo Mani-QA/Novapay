@@ -1,0 +1,15 @@
+name = "novapay"
+main = "src/index.ts"
+compatibility_date = "2024-06-01"
+
+[assets]
+directory = "./frontend/dist"
+binding = "ASSETS"
+
+[env.dev.vars]
+SESSION_SECRET = "dev-secret-local-only"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "novapay-db"
+database_id = "70059a3c-03e6-49db-9379-ab1b708fa931"
